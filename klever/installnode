@@ -1,0 +1,120 @@
+#!/bin/bash
+
+while true
+do
+
+# Logo
+
+echo "============================================================"
+curl -s https://raw.githubusercontent.com/AlekseyMoskalev1/script/main/Noders.sh | bash
+echo "============================================================"
+
+# Menu
+
+PS3='Select an action: '
+options=(
+"Install Docker"
+"Update ATP"
+"Install Node"
+"Check log"
+"Wallet addres"
+"Exit")
+select opt in "${options[@]}"
+do
+case $opt in
+
+# Docker
+
+"Install Docker")
+echo "============================================================"
+echo "Docker installation started"
+echo "============================================================"
+sudo apt-get install curl gnupg apt-transport-https ca-certificates \
+lsb-release -y && curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+| sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
+echo "deb [arch=$(dpkg --print-architecture) \
+signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] \
+https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
+| sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+sudo apt-get update && \
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+sudo chmod +x /usr/local/bin/docker-compose && docker-compose --version
+echo "============================================================"
+echo "Docker installed"
+echo "============================================================"
+break
+;;
+
+# ATP
+
+"Update ATP")
+echo "============================================================"
+echo "ATP update started"
+echo "============================================================"
+sudo apt update && sudo apt upgrade -y
+echo "============================================================"
+echo "ATP updated"
+echo "============================================================"
+break
+;;
+
+"Install Node")
+docker pull kleverapp/klever-go-testnet:latest
+
+mkdir wallet
+docker run -it --rm --user "$(id -u):$(id -g)" \
+ -v $(pwd)/wallet:/opt/klever-blockchain \
+ --entrypoint=/usr/local/bin/operator kleverapp/klever-go-testnet:latest "create-wallet"
+
+mkdir -p $(pwd)/node/config $(pwd)/node/db $(pwd)/node/logs
+curl -k https://backup.testnet.klever.finance/config.testnet.100005.tar.gz \
+    | tar -xz -C ./node
+    
+docker run -it --rm -v $(pwd)/node/config:/opt/klever-blockchain \
+    --user "$(id -u):$(id -g)" \
+    --entrypoint='' kleverapp/klever-go-testnet:latest keygenerator
+    
+curl -k https://backup.testnet.klever.finance/kleverchain.latest.tar.gz \
+    | tar -xz -C ./node
+
+docker run -it -d \
+    --user "$(id -u):$(id -g)" \
+    --name klever-node \
+    -v $(pwd)/node/config:/opt/klever-blockchain/config/node \
+    -v $(pwd)/node/db:/opt/klever-blockchain/db \
+    -v $(pwd)/node/logs:/opt/klever-blockchain/logs \
+    --network=host \
+    --entrypoint=/usr/local/bin/validator \
+    kleverapp/klever-go-testnet:latest \
+    '--log-save' '--use-log-view' '--rest-api-interface=0.0.0.0:8080'
+
+break
+;;
+
+"Check log")
+
+docker logs -f --tail 5 klever-node
+
+break
+;;
+
+"Wallet addres")
+
+docker run -it --rm --user "$(id -u):$(id -g)" \
+ -v $(pwd)/wallet:/opt/klever-blockchain \
+ --entrypoint=/usr/local/bin/operator kleverapp/klever-go-testnet:latest "getAddress"
+
+
+break
+;;
+
+#Exit
+
+"Exit")
+exit
+;;
+*) echo "invalid option $REPLY";;
+esac
+done
+done
