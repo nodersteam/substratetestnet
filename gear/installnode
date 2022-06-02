@@ -11,11 +11,33 @@ echo "============================================================"
 
 
 PS3='Select an action: '
-options=("Prepare the server for installation" "Install GearNode" "Log Node" "Exit")
+options=("Prepare the server for installation" "Install GearNode" "Update node" "Log Node" "Delete node" "Exit")
 select opt in "${options[@]}"
                do
                    case $opt in
-                   
+"Update node")
+
+wget https://builds.gear.rs/gear-nightly-linux-x86_64.tar.xz
+sudo tar -xvf gear-nightly-linux-x86_64.tar.xz -C /root
+rm gear-nightly-linux-x86_64.tar.xz
+sudo systemctl restart gear-node
+
+break
+;;
+
+
+"Delete node")
+
+sudo systemctl stop gear-node
+sudo systemctl disable gear-node
+sudo rm -rf /root/.local/share/gear-node
+sudo rm /etc/systemd/system/gear-node.service
+sudo rm /root/gear-node
+
+break
+;;
+
+
 "Prepare the server for installation")
                echo "============================================================"
                echo "Preparation has begun"
