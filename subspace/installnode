@@ -44,8 +44,8 @@ echo 'export WALLETADDRESS='${WALLETADDRESS} >> $HOME/.bash_profile
 echo "============================================================"
 echo "Write plot size for farmer(100G and more)"
 echo "============================================================"
-read NODENAME
-echo 'export NODENAME='${NODENAME} >> $HOME/.bash_profile
+read PLOTSIZE
+echo 'export PLOTSIZE='${PLOTSIZE} >> $HOME/.bash_profile
 source ~/.bash_profile
 
 rm -r subspace
@@ -59,39 +59,39 @@ sudo mv * /usr/local/bin/ && \
 cd $HOME && \
 rm -Rvf $HOME/subspace
 
-sudo tee <<EOF >/dev/null /etc/systemd/system/subspace.service
+sudo tee <<EOF >/dev/null /etc/systemd/system/subspaced.service
 [Unit]
-Description=subspace
+Description=Subspace Node
 After=network.target
 [Service]
 Type=simple
-User=root
-ExecStart=$(which subspace) \
-  --chain gemini-1 \
-  --execution wasm \
-  --pruning 1024 \
-  --keep-blocks 1024 \
-  --validator \
-  --name $NODENAME
+User=$USER
+ExecStart=$(which subspace) \\
+--chain="gemini-1" \\
+--execution="wasm" \\
+--pruning=1024 \\
+--keep-blocks=1024 \\
+--validator \\
+--name="${NODENAME}"
 Restart=on-failure
-RestartSec=3
+RestartSec=10
 LimitNOFILE=10000
 [Install]
 WantedBy=multi-user.target
 EOF
 
-sudo tee <<EOF >/dev/null /etc/systemd/system/subspacefarm.service
+sudo tee <<EOF >/dev/null /etc/systemd/system/farmerd.service
 [Unit]
-Description=subspacefarm
+Description=Subspace Farmer
 After=network.target
 [Service]
 Type=simple
-User=root
-ExecStart=$(which farmer) \
---reward-address $WALLETADDRESS \
---plot-size $PLOT_SIZE
+User=$USER
+ExecStart=$(which farmer) farm \\
+--reward-address=${WALLETADDRESS} \\
+--plot-size=${PLOTSIZE}
 Restart=on-failure
-RestartSec=3
+RestartSec=10
 LimitNOFILE=10000
 [Install]
 WantedBy=multi-user.target
@@ -99,21 +99,21 @@ EOF
 
 sudo systemctl restart systemd-journald
 sudo systemctl daemon-reload
-sudo systemctl enable subspace
-sudo systemctl enable subspacefarm
-sudo systemctl restart subspacefarm
-sudo systemctl restart subspace
+sudo systemctl enable subspaced
+sudo systemctl enable farmerd
+sudo systemctl restart farmerd
+sudo systemctl restart subspaced
 
 break
 ;;
 
 "Log Node")
-sudo journalctl -n 100 -f -u subspace
+sudo journalctl -n 100 -f -u subspaced
 break
 ;;
 
 "Log Farmer")
-sudo journalctl -n 100 -f -u subspacefarm
+sudo journalctl -n 100 -f -u farmerd
 break
 ;;
 
