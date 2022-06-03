@@ -17,11 +17,17 @@ options=(
 "Log Node"
 "Log Farmer"
 "Update Node"
+"Restart"
 "Delete Node"
 "Exit")
 select opt in "${options[@]}"
 do
 case $opt in
+
+"Restart")
+sudo systemctl restart subspace subspacefarm
+break
+;;
 
 "Update Node")
 sudo systemctl stop subspace subspacefarm
