@@ -100,10 +100,10 @@ EOF
 
 sudo systemctl restart systemd-journald
 sudo systemctl daemon-reload
-sudo systemctl enable subspaced
-sudo systemctl enable farmerd
-sudo systemctl restart farmerd
-sudo systemctl restart subspaced
+sudo systemctl enable subspace
+sudo systemctl enable subspacefarm
+sudo systemctl restart subspacefarm
+sudo systemctl restart subspace
 
 break
 ;;
@@ -115,7 +115,7 @@ systemctl disable subspace subspacefarm
 rm /etc/systemd/system/subspace.service
 rm /etc/systemd/system/subspacefarm.service
 rm -r /usr/local/bin/subspace
-rm -r /usr/local/bin/farmer
+rm -r /usr/local/bin/subspacefarm
 
 break
 ;;
