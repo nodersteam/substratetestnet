@@ -32,7 +32,7 @@ cp /root/.local/share/subspace/chains/subspace_test/network/secret_ed25519 $HOME
 rm  /usr/local/bin/subspace
 rm  /usr/local/bin/farmer
 rm -r $HOME/subspace
-rm –r /root/.local/share/subspace/
+rm -r /root/.local/share/subspace/
 
 echo "============================================================"
 echo "Write the name of your node"
