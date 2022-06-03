@@ -26,6 +26,7 @@ case $opt in
 "Update Node")
 sudo systemctl stop subspace subspacefarm
 
+apt install jq
 farmer wipe && \ subspace purge-chain --chain gemini-1 -y > /dev/null 2>&1 && \ subspace purge-chain --chain testnet -y > /dev/null 2>&1
 cp /root/.local/share/subspace/chains/subspace_test/network/secret_ed25519 $HOME
 
@@ -74,7 +75,7 @@ echo "============================================================"
 echo "Preparations have begun"
 echo "============================================================"
 sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install wget -y
+sudo apt-get install wget jq -y
 break
 ;;
 
@@ -95,6 +96,8 @@ echo "============================================================"
 read PLOTSIZE
 echo 'export PLOTSIZE='${PLOTSIZE} >> $HOME/.bash_profile
 source ~/.bash_profile
+
+apt install jq
 
 mkdir $HOME/subspace; \
 cd $HOME/subspace && \
