@@ -39,17 +39,17 @@ echo "============================================================"
 echo "Write the name of your node"
 echo "============================================================"
 read NODENAME
-echo 'export NODENAME='${NODENAME} >> $HOME/.bash_profile
+echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
 echo "============================================================"
 echo "Enter your wallet address"
 echo "============================================================"
 read WALLETADDRESS
-echo 'export WALLETADDRESS='${WALLETADDRESS} >> $HOME/.bash_profile
+echo 'export WALLETADDRESS='$WALLETADDRESS >> $HOME/.bash_profile
 echo "============================================================"
 echo "Write plot size for farmer(100G and more)"
 echo "============================================================"
 read PLOTSIZE
-echo 'export PLOTSIZE='${PLOTSIZE} >> $HOME/.bash_profile
+echo 'export PLOTSIZE='$PLOTSIZE >> $HOME/.bash_profile
 source ~/.bash_profile
 
 mkdir $HOME/subspace; \
@@ -84,17 +84,17 @@ echo "============================================================"
 echo "Write the name of your node"
 echo "============================================================"
 read NODENAME
-echo 'export NODENAME='${NODENAME} >> $HOME/.bash_profile
+echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
 echo "============================================================"
 echo "Enter your wallet address"
 echo "============================================================"
 read WALLETADDRESS
-echo 'export WALLETADDRESS='${WALLETADDRESS} >> $HOME/.bash_profile
+echo 'export WALLETADDRESS='$WALLETADDRESS >> $HOME/.bash_profile
 echo "============================================================"
 echo "Write plot size for farmer(100G and more)"
 echo "============================================================"
 read PLOTSIZE
-echo 'export PLOTSIZE='${PLOTSIZE} >> $HOME/.bash_profile
+echo 'export PLOTSIZE='$PLOTSIZE >> $HOME/.bash_profile
 source ~/.bash_profile
 
 apt install jq
