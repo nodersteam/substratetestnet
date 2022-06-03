@@ -30,8 +30,8 @@ apt install jq
 farmer wipe && \ subspace purge-chain --chain gemini-1 -y > /dev/null 2>&1 && \ subspace purge-chain --chain testnet -y > /dev/null 2>&1
 cp /root/.local/share/subspace/chains/subspace_test/network/secret_ed25519 $HOME
 
-rm  /usr/local/bin/subspace
-rm  /usr/local/bin/farmer
+rm -r /usr/local/bin/subspace
+rm -r /usr/local/bin/farmer
 rm -r $HOME/subspace
 rm -r /root/.local/share/subspace/
 
