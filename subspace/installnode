@@ -30,10 +30,12 @@ apt install jq
 farmer wipe && \ subspace purge-chain --chain gemini-1 -y > /dev/null 2>&1 && \ subspace purge-chain --chain testnet -y > /dev/null 2>&1
 cp /root/.local/share/subspace/chains/subspace_test/network/secret_ed25519 $HOME
 
+systemctl stop subspace subspacefarm
+systemctl disable subspace subspacefarm
+rm /etc/systemd/system/subspace.service
+rm /etc/systemd/system/subspacefarm.service
 rm -r /usr/local/bin/subspace
 rm -r /usr/local/bin/farmer
-rm -r $HOME/subspace
-rm -r /root/.local/share/subspace/
 
 echo "============================================================"
 echo "Write the name of your node"
@@ -62,7 +64,51 @@ sudo mv * /usr/local/bin/ && \
 cd $HOME && \
 rm -Rvf $HOME/subspace
 
-sudo systemctl restart subspacefarm subspace
+sudo tee <<EOF >/dev/null /etc/systemd/system/subspace.service
+[Unit]
+Description=Subspace Node
+After=network.target
+[Service]
+Type=simple
+User=$USER
+ExecStart=$(which subspace) \\
+--chain="gemini-1" \\
+--execution="wasm" \\
+--pruning=1024 \\
+--keep-blocks=1024 \\
+--validator \\
+--name="$NODENAME"
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=10000
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo tee <<EOF >/dev/null /etc/systemd/system/subspacefarm.service
+[Unit]
+Description=Subspace Farmer
+After=network.target
+[Service]
+Type=simple
+User=$USER
+ExecStart=$(which farmer) farm \\
+--reward-address=$WALLETADDRESS \\
+--plot-size=$PLOTSIZE
+Restart=on-failure
+RestartSec=10
+LimitNOFILE=10000
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl restart systemd-journald
+sudo systemctl daemon-reload
+sudo systemctl enable subspace subspacefarm
+sudo systemctl start subspacefarm subspace
+
+sleep 5
+
 sudo systemctl stop subspacefarm subspace
 rm /root/.local/share/subspace-node/chains/subspace_gemini_1b/network/secret_ed25519
 mv $HOME/secret_ed25519 /root/.local/share/subspace-node/chains/subspace_gemini_1b/network/
@@ -149,10 +195,8 @@ EOF
 
 sudo systemctl restart systemd-journald
 sudo systemctl daemon-reload
-sudo systemctl enable subspace
-sudo systemctl enable subspacefarm
-sudo systemctl restart subspacefarm
-sudo systemctl restart subspace
+sudo systemctl enable subspace subspacefarm
+sudo systemctl restart subspacefarm subspace
 
 break
 ;;
