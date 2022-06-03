@@ -114,7 +114,7 @@ systemctl disable subspace subspacefarm
 rm /etc/systemd/system/subspace.service
 rm /etc/systemd/system/subspacefarm.service
 rm -r /usr/local/bin/subspace
-rm -r /usr/local/bin/subspacefarm
+rm -r /usr/local/bin/farmer
 
 break
 ;;
