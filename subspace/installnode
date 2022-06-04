@@ -34,7 +34,6 @@ break
 sudo systemctl stop subspace subspacefarm
 
 apt install jq
-farmer wipe && \ subspace purge-chain --chain gemini-1 -y > /dev/null 2>&1 && \ subspace purge-chain --chain testnet -y > /dev/null 2>&1
 cp /root/.local/share/subspace-node/chains/subspace_gemini_1b/network/secret_ed25519 $HOME
 
 systemctl stop subspace subspacefarm
