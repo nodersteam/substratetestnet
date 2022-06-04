@@ -60,6 +60,9 @@ read PLOTSIZE
 echo 'export PLOTSIZE='$PLOTSIZE >> $HOME/.bash_profile
 source ~/.bash_profile
 
+farmer wipe && \
+subspace purge-chain --chain="gemini-1" -y > /dev/null 2>&1 && \
+subspace purge-chain --chain="testnet" -y > /dev/null 2>&1
 
 mkdir $HOME/subspace; \
 cd $HOME/subspace && \
