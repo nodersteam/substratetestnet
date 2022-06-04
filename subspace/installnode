@@ -45,6 +45,7 @@ rm -r /usr/local/bin/farmer
 
 source ~/.bash_profile
 
+
 mkdir $HOME/subspace; \
 cd $HOME/subspace && \
 VER=$(wget -qO- https://api.github.com/repos/subspace/subspace/releases/latest | jq -r ".tag_name") && \
@@ -133,7 +134,7 @@ echo "============================================================"
 read WALLETADDRESS
 echo 'export WALLETADDRESS='$WALLETADDRESS >> $HOME/.bash_profile
 echo "============================================================"
-echo "Write plot size for farmer(100G and more)"
+echo "Write plot size for farmer(Exemple 100G)"
 echo "============================================================"
 read PLOTSIZE
 echo 'export PLOTSIZE='$PLOTSIZE >> $HOME/.bash_profile
