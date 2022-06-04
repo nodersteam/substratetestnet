@@ -43,6 +43,21 @@ rm /etc/systemd/system/subspacefarm.service
 rm -r /usr/local/bin/subspace
 rm -r /usr/local/bin/farmer
 
+echo "============================================================"
+echo "Write the name of your node"
+echo "============================================================"
+read NODENAME
+echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
+echo "============================================================"
+echo "Enter your wallet address"
+echo "============================================================"
+read WALLETADDRESS
+echo 'export WALLETADDRESS='$WALLETADDRESS >> $HOME/.bash_profile
+echo "============================================================"
+echo "Write plot size for farmer(Exemple 100G)!"
+echo "============================================================"
+read PLOTSIZE
+echo 'export PLOTSIZE='$PLOTSIZE >> $HOME/.bash_profile
 source ~/.bash_profile
 
 
@@ -134,7 +149,7 @@ echo "============================================================"
 read WALLETADDRESS
 echo 'export WALLETADDRESS='$WALLETADDRESS >> $HOME/.bash_profile
 echo "============================================================"
-echo "Write plot size for farmer(Exemple 100G)"
+echo "Write plot size for farmer(Exemple 100G)!"
 echo "============================================================"
 read PLOTSIZE
 echo 'export PLOTSIZE='$PLOTSIZE >> $HOME/.bash_profile
