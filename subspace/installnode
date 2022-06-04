@@ -35,6 +35,7 @@ sudo systemctl stop subspace subspacefarm
 
 apt install jq
 cp /root/.local/share/subspace-node/chains/subspace_gemini_1b/network/secret_ed25519 $HOME
+farmer wipe && \ subspace purge-chain --chain gemini-1 -y > /dev/null 2>&1 && \ subspace purge-chain --chain testnet -y > /dev/null 2>&1
 
 systemctl stop subspace subspacefarm
 systemctl disable subspace subspacefarm
@@ -59,10 +60,6 @@ echo "============================================================"
 read PLOTSIZE
 echo 'export PLOTSIZE='$PLOTSIZE >> $HOME/.bash_profile
 source ~/.bash_profile
-
-farmer wipe && \
-subspace purge-chain --chain="gemini-1" -y > /dev/null 2>&1 && \
-subspace purge-chain --chain="testnet" -y > /dev/null 2>&1
 
 mkdir $HOME/subspace; \
 cd $HOME/subspace && \
