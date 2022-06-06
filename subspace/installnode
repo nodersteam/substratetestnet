@@ -19,12 +19,27 @@ options=(
 "Update Node"
 "Update Node 2"
 "Install node with DOCKER"
+"Docker FARM log"
+"Docker NODE log"
 "Restart"
 "Delete Node"
 "Exit")
 select opt in "${options[@]}"
 do
 case $opt in
+
+"Docker FARM log")
+docker logs -f subspace_farmer_1 --tail 5000
+break
+;;
+
+
+"Docker NODE log")
+docker logs -f subspace_node_1 --tail 5000
+break
+;;
+
+
 
 "Install node with DOCKER")
 sudo apt update
