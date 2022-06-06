@@ -78,7 +78,7 @@ source ~/.bash_profile
 cd $HOME
 mkdir subspace
 cd $HOME/subspace
-cat > /root/subspace/docker-compose.yml > /dev/null <<EOF
+tee /root/subspace/docker-compose.yml > /dev/null <<EOF
 version: "3.7"
 services:
   node:
