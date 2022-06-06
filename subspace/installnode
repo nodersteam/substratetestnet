@@ -43,6 +43,23 @@ sudo chmod +x /usr/local/bin/docker-compose
 sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
 sudo chmod a+x /usr/local/bin/yq
 
+echo "============================================================"
+echo "Write the name of your node"
+echo "============================================================"
+read NODENAME
+echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
+echo "============================================================"
+echo "Enter your wallet address"
+echo "============================================================"
+read WALLETADDRESS
+echo 'export WALLETADDRESS='$WALLETADDRESS >> $HOME/.bash_profile
+echo "============================================================"
+echo "Write plot size for farmer(Exemple 100G)!"
+echo "============================================================"
+read PLOTSIZE
+echo 'export PLOTSIZE='$PLOTSIZE >> $HOME/.bash_profile
+source ~/.bash_profile
+
 cd $HOME
 mkdir subspace
 cd $HOME/subspace
@@ -115,23 +132,6 @@ volumes:
   node-data:
   farmer-data:
 EOF
-
-echo "============================================================"
-echo "Write the name of your node"
-echo "============================================================"
-read NODENAME
-echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
-echo "============================================================"
-echo "Enter your wallet address"
-echo "============================================================"
-read WALLETADDRESS
-echo 'export WALLETADDRESS='$WALLETADDRESS >> $HOME/.bash_profile
-echo "============================================================"
-echo "Write plot size for farmer(Exemple 100G)!"
-echo "============================================================"
-read PLOTSIZE
-echo 'export PLOTSIZE='$PLOTSIZE >> $HOME/.bash_profile
-source ~/.bash_profile
 
 cd $HOME/subspace
 docker-compose up -d
