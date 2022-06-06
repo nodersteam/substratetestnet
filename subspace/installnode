@@ -46,7 +46,7 @@ sudo chmod a+x /usr/local/bin/yq
 cd $HOME
 mkdir subspace
 cd $HOME/subspace
-cat << EOF > docker-compose.yml
+cat > /root/subspace/docker-compose.yml <<EOF
 version: "3.7"
 services:
   node:
