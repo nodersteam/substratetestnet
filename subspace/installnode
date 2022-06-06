@@ -18,12 +18,58 @@ options=(
 "Log Farmer"
 "Update Node"
 "Update Node 2"
+"Install node with DOCKER"
 "Restart"
 "Delete Node"
 "Exit")
 select opt in "${options[@]}"
 do
 case $opt in
+
+"Install node with DOCKER")
+sudo apt update
+sudo apt install ca-certificates curl gnupg lsb-release wget jq sed -y
+sudo apt-get install ca-certificates curl gnupg lsb-release wget -y
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io -y
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+sudo chmod a+x /usr/local/bin/yq
+
+cd $HOME
+mkdir subspace
+cd $HOME/subspace
+wget https://github.com/nodersteam/substratetestnet/blob/main/subspace/docker-compose.yml
+
+echo "============================================================"
+echo "Write the name of your node"
+echo "============================================================"
+read NODENAME
+echo 'export NODENAME='$NODENAME >> $HOME/.bash_profile
+echo "============================================================"
+echo "Enter your wallet address"
+echo "============================================================"
+read WALLETADDRESS
+echo 'export WALLETADDRESS='$WALLETADDRESS >> $HOME/.bash_profile
+echo "============================================================"
+echo "Write plot size for farmer(Exemple 100G)!"
+echo "============================================================"
+read PLOTSIZE
+echo 'export PLOTSIZE='$PLOTSIZE >> $HOME/.bash_profile
+source ~/.bash_profile
+
+cd $HOME/subspace
+docker-compose up -d
+
+break
+;;
 
 "Restart")
 sudo systemctl restart subspace subspacefarm
